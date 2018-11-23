@@ -15,16 +15,25 @@ npm install --save react-color-table
 ```tsx
 import * as React from 'react'
 
-import MyComponent from 'react-color-table'
+import { ColorTable } from 'react-color-table'
 
-class Example extends React.Component {
-  render () {
-    return (
-      <MyComponent />
-    )
-  }
-}
+export const Example = () =>
+  <ColorTable
+    colors={['#123123', 'rgba(123,123,123,12)']}
+    averageDuplicates
+    inferBlanks
+  />
 ```
+
+## Props
+
+| name              | type          | default |
+| ----------------- | ------------- | ------- |
+| colors            | string[]      | []      |
+| rowHeight?        | string/number | 64      |
+| columnWidth?      | string/number | '100%'  |
+| averageDuplicates | boolean       | false   |
+| inferBlanks       | boolean       | false   |
 
 ## License
 
