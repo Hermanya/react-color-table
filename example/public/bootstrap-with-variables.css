@@ -6,8 +6,8 @@
     --blue_0: 255, 255, 255;
     --blue_800: 0, 39, 82;
     --blue_900: 0, 36, 74;
-    --blue_50: 224, 239, 255;
-    --blue_100: 189, 221, 255;
+    --blue_50: 204, 229, 255;
+    --blue_100: 182, 217, 255;
     --blue_200: 138, 194, 255;
     --blue_300: 120, 185, 255;
     --blue_700: 0, 64, 133;
@@ -42,8 +42,8 @@
     --red_0: 255, 255, 255;
     --red_800: 73, 18, 23;
     --red_900: 63, 11, 16;
-    --red_50: 250, 229, 231;
-    --red_100: 247, 207, 211;
+    --red_50: 248, 215, 218;
+    --red_100: 245, 198, 203;
     --red_200: 240, 169, 176;
     --red_300: 235, 140, 149;
     --red_700: 114, 28, 36;
@@ -66,8 +66,8 @@
     --yellow_0: 255, 255, 255;
     --yellow_800: 83, 63, 3;
     --yellow_900: 74, 56, 0;
-    --yellow_50: 252, 248, 227;
-    --yellow_100: 255, 241, 196;
+    --yellow_50: 254, 246, 216;
+    --yellow_100: 255, 238, 186;
     --yellow_200: 255, 232, 161;
     --yellow_300: 255, 221, 120;
     --yellow_700: 133, 100, 4;
@@ -114,8 +114,8 @@
     --gray_0: 254, 254, 254;
     --gray_800: 49, 54, 60;
     --gray_900: 28, 31, 34;
-    --gray_50: 240, 242, 243;
-    --gray_100: 223, 227, 230;
+    --gray_50: 235, 237, 239;
+    --gray_100: 219, 224, 228;
     --gray_200: 206, 209, 213;
     --gray_300: 179, 184, 190;
     --gray_700: 76, 83, 89;
@@ -2679,7 +2679,7 @@
 
   .btn-light:hover {
     color: rgba(var(--gray_900), 1);
-    background-color: rgba(var(--gray_100), 1);
+    background-color: rgba(var(--gray_50), 1);
     border-color: rgba(var(--gray_100), 1);
   }
 
@@ -5061,7 +5061,7 @@
 
   .alert-primary {
     color: rgba(var(--blue_700), 1);
-    background-color: rgba(var(--blue_100), 1);
+    background-color: rgba(var(--blue_50), 1);
     border-color: rgba(var(--blue_100), 1);
   }
 
@@ -5117,7 +5117,7 @@
 
   .alert-warning {
     color: rgba(var(--yellow_700), 1);
-    background-color: rgba(var(--yellow_100), 1);
+    background-color: rgba(var(--yellow_50), 1);
     border-color: rgba(var(--yellow_100), 1);
   }
 
@@ -5131,7 +5131,7 @@
 
   .alert-danger {
     color: rgba(var(--red_700), 1);
-    background-color: rgba(var(--red_100), 1);
+    background-color: rgba(var(--red_50), 1);
     border-color: rgba(var(--red_100), 1);
   }
 
@@ -5929,7 +5929,7 @@
     font-size: 1rem;
     color: inherit;
     background-color: rgba(var(--gray_50), 1);
-    border-bottom: 1px solid rgba(var(--gray_100), 1);
+    border-bottom: 1px solid rgba(var(--gray_50), 1);
     border-top-left-radius: calc(0.3rem - 1px);
     border-top-right-radius: calc(0.3rem - 1px);
   }

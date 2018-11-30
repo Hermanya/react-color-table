@@ -53,81 +53,73 @@ export type Props = {
   colors: string[],
   rowHeight?: string | number,
   columnWidth?: string | number,
-  averageDuplicates: boolean,
-  inferBlanks: boolean,
-  title: string,
-  style: React.CSSProperties
+  averageDuplicates?: boolean,
+  inferBlanks?: boolean,
+  title?: string,
+  style?: React.CSSProperties
+  columnStyle?: React.CSSProperties
 }
 
+const Cell = ({style, rowHeight, columnWidth, ...props}:any) => <div style={{
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: rowHeight,
+    width: columnWidth,
+  ...style
+}} {...props}/>
+
+const Column = ({style, rowHeight, columnWidth, ...props}:any) => <div style={{
+  display: 'flex',
+  flexDirection: 'column',
+  ...style
+}} {...props}/>
+
+
 export const ColorTable: React.SFC<Props> = ({
-  colors, rowHeight, columnWidth, averageDuplicates, inferBlanks, title, style, ...otherProps
+  colors, rowHeight, columnWidth, averageDuplicates, inferBlanks, title, style, columnStyle, ...otherProps
 }) => {
   const enrichedColors = colors.map(enrich)
   const hueBins = Array.from(new Set(enrichedColors.map(_ => _.hueBin)))
-
+  const size = {rowHeight, columnWidth}
   return <div
     style={{
-      display: 'flex', flexDirection: 'column', flexFlow: 'column-reverse',
+      display: 'flex',
       ...style
     }} {...otherProps}>
-    {lightnessBins.map(lightnessBin => <div key={lightnessBin} style={{
-      display: 'flex',
-      alignItems: 'center'
-    }}>
-      <div style={{
-        width: columnWidth,
-        textAlign: 'center'
-      }}>{lightnessBin}</div>
+    <Column key={'hues'}>
+      <Cell key={'h'} rowHeight={rowHeight}>{title}</Cell>
+      {hueBins.map(h => <Cell key={h}  {...size}>{h}</Cell>)}
+    </Column>
+
+    {lightnessBins.map(lightnessBin => <Column key={lightnessBin} style={columnStyle}>
+      <Cell key={lightnessBin} {...size}>{lightnessBin}</Cell>
 
       {hueBins.map(hueBin => {
-        let colorsInThisQuadrant = enrichedColors.filter(_ => _.hueBin === hueBin && _.lightnessBin === lightnessBin)
-        if (colorsInThisQuadrant.length === 0 && inferBlanks) {
-          colorsInThisQuadrant = [inferColor(hueBin, lightnessBin, enrichedColors)].map(enrich)
-        } else if (colorsInThisQuadrant.length > 1 && averageDuplicates) {
-            colorsInThisQuadrant = [averageColor(colorsInThisQuadrant)].map(enrich)
+        let cellColors = enrichedColors.filter(_ => _.hueBin === hueBin && _.lightnessBin === lightnessBin)
+        if (cellColors.length === 0 && inferBlanks) {
+          cellColors = [inferColor(hueBin, lightnessBin, enrichedColors)].map(enrich)
+        } else if (cellColors.length > 1 && averageDuplicates) {
+            cellColors = [averageColor(cellColors)].map(enrich)
         }
-        return <div key={lightnessBin+hueBin} style={{
-          display: 'flex',
-          height: rowHeight,
-          width: columnWidth
-        }}>
+        return <Cell key={lightnessBin+hueBin} {...size}>
           {
-            colorsInThisQuadrant.map(_ =>
-            <div key={_.original} style={{
-              display: 'flex',
-              flexGrow: 1,
+            cellColors.map(_ =>
+            <Cell key={_.original} style={{
               background:  `hsl(${_.h}, ${_.s*100}%, ${_.l*100}%)`,
-              height: rowHeight,
               // boxShadow: `inset 0 0 1px ${_.contrastColor}`
               outline: `1px solid white`
-            }} title={JSON.stringify(_)}></div>)}
-        </div>
+            }} title={JSON.stringify(_)} {...size}></Cell>)}
+        </Cell>
       })}
-    </div>)}
-
-    <div key={'hues'} style={{
-      display: 'flex',
-      alignItems: 'center',
-    }}>
-     <div key={'h'} style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: rowHeight,
-        width: columnWidth
-      }}>{title}</div>
-    {hueBins.map(h => <div key={h} style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: rowHeight,
-        width: columnWidth
-      }}>{h}</div>)}
-    </div>
+    </Column>)}
   </div>
 }
 
 ColorTable.defaultProps = {
+  colors: [],
   rowHeight: 64,
-  columnWidth: '100%'
+  columnWidth: 64,
+  columnStyle: {},
+  style: {}
 }

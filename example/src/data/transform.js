@@ -37,11 +37,12 @@ hueBins.forEach((hueBin) =>
         const binMatches = enrichedColors.filter(_ => _.hueBin === hueBin && _.lightnessBin === lightnessBin)
         const value = chroma(binMatches.length === 0
             ? inferColor(hueBin, lightnessBin, enrichedColors)
+            // : binMatches.length === 1 ? binMatches[0].original
             : averageColor(binMatches)
          ).rgb().join(', ')
         variables.push(`${variable}: ${value};`)
-        binMatches.forEach(({original, alpha}) => {
-            bootstrapWithVariables = bootstrapWithVariables.split(original).join(`rgba(var(${variable}), ${alpha})`)
+        binMatches.forEach(_ => {
+            bootstrapWithVariables = bootstrapWithVariables.split(_.original).join(`rgba(var(${variable}), ${_.alpha})`)
         })
     })
 )
