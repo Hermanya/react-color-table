@@ -22,6 +22,7 @@ const hueBins = Array.from(new Set(enrichedColors.map(_ => _.hueBin)))
 const lightnessBins = Array.from(new Set(enrichedColors.map(_ => _.lightnessBin)))
 
 let variables = []
+let aliases = []
 // let variableColors = {
 //     primary: 'blue',
 //     secondary: 'gray',
@@ -31,16 +32,24 @@ let variables = []
 //     info: 'cyan'
 // }
 let bootstrapWithVariables = bootstrap
+let cssVar = (h, l) => `--${h}_${l}`
 hueBins.forEach((hueBin) =>
     lightnessBins.forEach((lightnessBin) => {
-        const variable = `--${hueBin}_${lightnessBin}`
+        const [hueName, hueAlias] = hueBin.split(' / ')
+        const variable = cssVar(hueAlias || hueName, lightnessBin)
         const binMatches = enrichedColors.filter(_ => _.hueBin === hueBin && _.lightnessBin === lightnessBin)
-        const value = chroma(binMatches.length === 0
+        const hex = binMatches.length === 0
             ? inferColor(hueBin, lightnessBin, enrichedColors)
             // : binMatches.length === 1 ? binMatches[0].original
             : averageColor(binMatches)
-         ).rgb().join(', ')
-        variables.push(`${variable}: ${value};`)
+        const value = chroma(hex).rgb().join(', ')
+        if (hueAlias) {
+            const originalVariable = cssVar(hueName, lightnessBin)
+            aliases.push(`${variable}: var(${originalVariable});`)
+            variables.push(`${originalVariable}: ${value};`)
+        } else {
+            variables.push(`${variable}: ${value};`)
+        }
         binMatches.forEach(_ => {
             bootstrapWithVariables = bootstrapWithVariables.split(_.original).join(`rgba(var(${variable}), ${_.alpha})`)
         })
@@ -49,7 +58,7 @@ hueBins.forEach((hueBin) =>
 
 bootstrapWithVariables = `
 :root {
-    ${variables.join('\n    ')}
+    ${variables.concat(aliases).join('\n    ')}
 }
 ${bootstrapWithVariables}
 `
